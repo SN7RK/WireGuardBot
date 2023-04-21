@@ -30,8 +30,9 @@ class States(StatesGroup):
 
 def profile_keyboard(profiles):
     keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(*[types.InlineKeyboardButton(text=f"{p.name} - {p.tlg}",
-                                              callback_data=f"profile*{p.name}") for p in profiles])
+    for p in profiles:
+        keyboard.add(types.InlineKeyboardButton(text=f"{p.name} - {p.tlg}", callback_data=f"profile*{p.name}") )
+        
     return keyboard
 
 
@@ -75,7 +76,8 @@ async def system_reloader(message: types.Message):
         await message.answer("System has been restarted.")
 
 
-@dp.message_handler(lambda message: message.text == "Ссылки на VPN приложение")
+# @dp.message_handler(lambda message: message.text == "Скачать VPN приложение")
+@dp.message_handler(Text(equals="Скачать VPN приложение"))
 async def vpn_app_links(message: types.Message):
     await message.answer(LINKS, reply_markup=LINKS_KEY, parse_mode="HTML")
 

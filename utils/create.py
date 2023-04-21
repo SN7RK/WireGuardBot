@@ -3,20 +3,21 @@ import subprocess
 import ipaddress
 from db.models import engine, Users, Clients, Peer, Interface
 from sqlalchemy.orm import Session
-from utils.generate import generate_server
+from utils.generate import generate_server, get_user_by_id
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 def add_user(_tlg, _name):
-    with Session(bind=engine) as session:
-        new_user = Users(
-            tlg=_tlg,
-            name=_name
-        )
-        session.add(new_user)
-        session.commit()
+    if get_user_by_id(_tlg) == None:
+        with Session(bind=engine) as session:
+            new_user = Users(
+                tlg=_tlg,
+                name=_name
+            )
+            session.add(new_user)
+            session.commit()
 
 
 def add_client(_tlg, _name, _private, _address, _dns, _public, _shared, _endpoint, _ips):
